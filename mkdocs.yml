@@ -5,7 +5,7 @@ site_description: Pydantic is all you need
 site_author: Harsh Verma
 edit_uri: edit/main/docs/
 repo_name: synacktraa/buildantic
-copyright: Maintained by <a href="https://synacktraa.com">Florian</a>.
+copyright: Maintained by <a href="https://github.com/synacktraa.com">Harsh Verma</a>.
 
 nav:
   - Home: index.md
