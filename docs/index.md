@@ -193,7 +193,8 @@ print(asyncio.run(create_user.validate_python({
 ```
 
 ??? info "Validation methods shows correct return type"
-![create-user-return-type](./img/validate-method-return-type.png)
+
+    ![create-user-return-type](./img/validate-method-return-type.png)
 
 #### Creating a registry of type descriptors
 
@@ -261,7 +262,8 @@ def get_coordinates(location: str) -> Tuple[float, float]:
 ### Working with OpenAPI Specification
 
 ??? note "About OpenAPI operations"
-OpenAPI operations are loaded as operation descriptors in the `OpenAPIRegistry`.
+
+    OpenAPI operations are loaded as operation descriptors in the `OpenAPIRegistry`.
 
     Validation methods returns a `RequestModel`, after which you can use your favorite
     http client library to finally make request to the API.
