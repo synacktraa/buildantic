@@ -146,7 +146,12 @@ def test_type_descriptor_with_custom_validation():
         assert v % 2 == 0
         return v
 
-    descriptor = TypeDescriptor[int](t.Annotated[int, AfterValidator(check_even)])
+    if sys.version_info < (3, 10):
+        from typing_extensions import Annotated
+    else:
+        from typing import Annotated
+
+    descriptor = TypeDescriptor[int](Annotated[int, AfterValidator(check_even)])
     assert descriptor.validate_python(2) == 2
     assert descriptor.validate_python(4) == 4
     with pytest.raises(ValidationError):
