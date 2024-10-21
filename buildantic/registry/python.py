@@ -21,7 +21,7 @@ class Registry(BaseRegistry[TypeDescriptor, t.Any]):
         return self.__descriptor_map
 
     @t.overload
-    def register(self, __type: type[T_Retval]) -> type[T_Retval]:
+    def register(self, __type: t.Type[T_Retval]) -> t.Type[T_Retval]:
         """
         Register a python type
 

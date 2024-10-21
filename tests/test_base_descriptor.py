@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from buildantic.descriptor.base import BaseDescriptor
 
 

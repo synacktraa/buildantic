@@ -21,7 +21,7 @@ class SchemaValidator:
 
         :param __schema: The schema to create validator from
         """
-        validator_cls: type[ValidatorProtocol] = validator_for(__schema)  # type: ignore[no-any-unimported]
+        validator_cls: t.Type[ValidatorProtocol] = validator_for(__schema)  # type: ignore[no-any-unimported]
         validator_cls.check_schema(__schema)
         self.__instance: ValidatorProtocol = validator_cls(__schema)  # type: ignore[no-any-unimported]
 

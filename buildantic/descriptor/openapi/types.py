@@ -37,12 +37,12 @@ class Operation(BaseModel):
     id: str  # 'operationId' key
     path: str
     method: Method
-    description: str | None  # 'description' or 'summary' key
-    path_meta: EncodableInputMeta[PathEncodingStyle] | None
-    query_meta: EncodableInputMeta[QueryEncodingStyle] | None
-    header_meta: InputMeta | None
-    cookie_meta: InputMeta | None
-    body_meta: InputMeta | None
+    description: t.Optional[str]  # 'description' or 'summary' key
+    path_meta: t.Optional[EncodableInputMeta[PathEncodingStyle]]
+    query_meta: t.Optional[EncodableInputMeta[QueryEncodingStyle]]
+    header_meta: t.Optional[InputMeta]
+    cookie_meta: t.Optional[InputMeta]
+    body_meta: t.Optional[InputMeta]
     body_required: bool = False
 
 
@@ -60,11 +60,11 @@ class RequestModel(BaseModel):
 
     path: str
     method: Method
-    queries: t.Dict[str, t.Any] | None = None
-    encoded_query: str | None = None
-    headers: t.Dict[str, t.Any] | None = None
-    cookies: t.Dict[str, t.Any] | None = None
-    body: t.Dict[str, t.Any] | None = None
+    queries: t.Optional[t.Dict[str, t.Any]] = None
+    encoded_query: t.Optional[str] = None
+    headers: t.Optional[t.Dict[str, t.Any]] = None
+    cookies: t.Optional[t.Dict[str, t.Any]] = None
+    body: t.Optional[t.Dict[str, t.Any]] = None
 
     @property
     def path_with_query(self) -> str:

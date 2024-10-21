@@ -161,15 +161,15 @@ def transform_to_gemini_schema(id: str, schema: t.Dict[str, t.Any]) -> t.Dict[st
     from pydantic import BaseModel
 
     class FCSchemaModel(BaseModel):
-        description: str | None = None
-        enum: t.List[str] | None = None
-        example: t.Any | None = None
-        format: str | None = None
-        nullable: bool | None = None
-        items: FCSchemaModel | None = None
-        required: t.List[str] | None = None
+        description: t.Optional[str] = None
+        enum: t.Optional[t.List[str]] = None
+        example: t.Optional[t.Any] = None
+        format: t.Optional[str] = None
+        nullable: t.Optional[bool] = None
+        items: t.Optional[FCSchemaModel] = None
+        required: t.Optional[t.List[str]] = None
         type: str
-        properties: t.Dict[str, FCSchemaModel] | None = None
+        properties: t.Optional[t.Dict[str, FCSchemaModel]] = None
 
     def add_enum_format(obj: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
         if isinstance(obj, dict):

@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import pytest
 
@@ -16,11 +14,11 @@ from buildantic.descriptor.openapi.utils import format_path, format_query
 def create_operation(
     path: str,
     method: str,
-    path_meta: Dict[str, Any] | None = None,
-    query_meta: Dict[str, Any] | None = None,
-    header_meta: Dict[str, Any] | None = None,
-    cookie_meta: Dict[str, Any] | None = None,
-    body_meta: Dict[str, Any] | None = None,
+    path_meta: Optional[Dict[str, Any]] = None,
+    query_meta: Optional[Dict[str, Any]] = None,
+    header_meta: Optional[Dict[str, Any]] = None,
+    cookie_meta: Optional[Dict[str, Any]] = None,
+    body_meta: Optional[Dict[str, Any]] = None,
     body_required: bool = False,
 ):
     return Operation(

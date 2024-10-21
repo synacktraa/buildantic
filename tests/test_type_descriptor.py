@@ -1,5 +1,4 @@
-from __future__ import annotations
-
+import sys
 import typing as t
 from enum import Enum
 
@@ -270,8 +269,8 @@ def test_complex_json_schema():
     class ComplexType(TypedDict):
         simple_field: str
         list_field: t.List[int]
-        dict_field: t.Dict[str, int | str]
-        nested_field: t.List[dict] | None
+        dict_field: t.Dict[str, t.Union[int, str]]
+        nested_field: t.Optional[t.List[dict]]
 
     descriptor = TypeDescriptor(ComplexType)
     schema = descriptor.schema
@@ -319,30 +318,32 @@ def test_custom_error_messages():
     assert "0" in error_message
 
 
-def test_fc_serialization_and_validation_of_simple_type():
-    descriptor = TypeDescriptor[t.List[str]](
-        t.Annotated[t.List[str], Field(description="list of string", alias="strings")]
-    )
-    oa_schema = descriptor.openai_schema
+if sys.version_info >= (3, 10):  # TODO: Add support for Annotated field in python < 3.10
 
-    # Name and description are extracted from Field info.
-    assert oa_schema["name"] == "strings"
-    assert oa_schema["description"] == "list of string"
+    def test_fc_serialization_and_validation_of_simple_type():
+        descriptor = TypeDescriptor[t.List[str]](
+            t.Annotated[t.List[str], Field(description="list of string", alias="strings")]
+        )
+        oa_schema = descriptor.openai_schema
 
-    # If descripted type is not object, then it is transformed into one with `input` being the property key
-    assert "input" in oa_schema["parameters"]["properties"]
+        # Name and description are extracted from Field info.
+        assert oa_schema["name"] == "strings"
+        assert oa_schema["description"] == "list of string"
 
-    # Both will work, as in function calling schema the input is added as a property key
-    assert descriptor.validate_python(obj={"input": ["name", "age", "role"]}) == [
-        "name",
-        "age",
-        "role",
-    ]
-    assert descriptor.validate_python(obj=["name", "age", "role"]) == ["name", "age", "role"]
+        # If descripted type is not object, then it is transformed into one with `input` being the property key
+        assert "input" in oa_schema["parameters"]["properties"]
 
-    assert descriptor.validate_json(data='{"input": ["name", "age", "role"]}') == [
-        "name",
-        "age",
-        "role",
-    ]
-    assert descriptor.validate_json(data='["name", "age", "role"]') == ["name", "age", "role"]
+        # Both will work, as in function calling schema the input is added as a property key
+        assert descriptor.validate_python(obj={"input": ["name", "age", "role"]}) == [
+            "name",
+            "age",
+            "role",
+        ]
+        assert descriptor.validate_python(obj=["name", "age", "role"]) == ["name", "age", "role"]
+
+        assert descriptor.validate_json(data='{"input": ["name", "age", "role"]}') == [
+            "name",
+            "age",
+            "role",
+        ]
+        assert descriptor.validate_json(data='["name", "age", "role"]') == ["name", "age", "role"]

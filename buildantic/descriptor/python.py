@@ -1,6 +1,12 @@
 from __future__ import annotations
 
+import sys
 import typing as t
+
+if sys.version_info < (3, 10):
+    from typing_extensions import Annotated
+else:
+    from typing import Annotated
 
 from jsonref import replace_refs  # type: ignore[import-untyped]
 
@@ -21,19 +27,19 @@ class TypeDescriptor(BaseDescriptor[T_Retval]):
     """
 
     @t.overload
-    def __init__(self, __type: type[T_Retval]) -> None:
+    def __init__(self, __type: t.Type[T_Retval]) -> None:
         """Descript a type"""
 
     @t.overload
     def __init__(self, __type: t.Callable[..., T_Retval]) -> None:
         """Descript a function"""
 
-    def __init__(self, __type: type[T_Retval] | t.Callable[..., T_Retval]) -> None:
+    def __init__(self, __type: t.Type[T_Retval] | t.Callable[..., T_Retval]) -> None:
         from pydantic.fields import FieldInfo
         from pydantic.type_adapter import TypeAdapter
 
         self.__id = None
-        if t.get_origin(__type) is t.Annotated:
+        if t.get_origin(__type) is Annotated:
             if len(args := t.get_args(__type)) < 2:
                 raise TypeError("Annotated types must have more than 1 argument.")
             if isinstance(field := args[1], FieldInfo) and field.alias:
@@ -78,7 +84,7 @@ class TypeDescriptor(BaseDescriptor[T_Retval]):
 
 
 @t.overload
-def descript(__type: type[T_Retval]) -> TypeDescriptor[T_Retval]: ...
+def descript(__type: t.Type[T_Retval]) -> TypeDescriptor[T_Retval]: ...
 @t.overload
 def descript(__type: t.Callable[..., T_Retval]) -> TypeDescriptor[T_Retval]: ...
 
